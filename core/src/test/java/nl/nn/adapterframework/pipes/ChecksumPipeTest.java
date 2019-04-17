@@ -123,56 +123,76 @@ public class ChecksumPipeTest extends PipeTestBase<ChecksumPipe> {
 	}
 	
 	// TEST FOR CORRECT AND CONSISTENT CHECKSUM RESULTS
-	
+
 	@Test
-	public void testChecksumResultADLER32() throws PipeRunException, IOException {
+	public void testChecksumResultADLER32_Unix() throws PipeRunException, IOException {
 		pipe.setType(CHECKSUM_ADLER32);
 		
 		String input = FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("ChecksumTest/testUnix.xml").getFile()));
 		String result = (String)pipe.doPipe(input, session).getResult();
 		assertEquals("cae22763", result);
+	}
+	
+	@Test
+	public void testChecksumResultADLER32_Windows() throws PipeRunException, IOException {
+		pipe.setType(CHECKSUM_ADLER32);
 		
-		input = FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("ChecksumTest/testWindows.xml").getFile()));
-		result = (String)pipe.doPipe(input, session).getResult();
+		String input = FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("ChecksumTest/testWindows.xml").getFile()));
+		String result = (String)pipe.doPipe(input, session).getResult();
 		assertEquals("f9c2277d", result);
 	}
 	
 	@Test
-	public void testChecksumResultCRC32() throws PipeRunException, IOException {
+	public void testChecksumResultCRC32_Unix() throws PipeRunException, IOException {
 		pipe.setType(CHECKSUM_CRC32);
 		
 		String input = FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("ChecksumTest/testUnix.xml").getFile()));
 		String result = (String)pipe.doPipe(input, session).getResult();
 		assertEquals("cb67c762", result);
+	}
+	
+	@Test
+	public void testChecksumResultCRC32_Windows() throws PipeRunException, IOException {
+		pipe.setType(CHECKSUM_CRC32);
 		
-		input = FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("ChecksumTest/testWindows.xml").getFile()));
-		result = (String)pipe.doPipe(input, session).getResult();
+		String input = FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("ChecksumTest/testWindows.xml").getFile()));
+		String result = (String)pipe.doPipe(input, session).getResult();
 		assertEquals("b31c1921", result);
 	}
 	
 	@Test
-	public void testChecksumResultMD5() throws PipeRunException, IOException {
+	public void testChecksumResultMD5_Unix() throws PipeRunException, IOException {
 		pipe.setType(CHECKSUM_MD5);
 		
 		String input = FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("ChecksumTest/testUnix.xml").getFile()));
 		String result = (String)pipe.doPipe(input, session).getResult();
 		assertEquals("2ce5de996eb02123131814426c2423ca", result);
+	}
+	
+	@Test
+	public void testChecksumResultMD5_Windows() throws PipeRunException, IOException {
+		pipe.setType(CHECKSUM_MD5);
 		
-		input = FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("ChecksumTest/testWindows.xml").getFile()));
-		result = (String)pipe.doPipe(input, session).getResult();
+		String input = FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("ChecksumTest/testWindows.xml").getFile()));
+		String result = (String)pipe.doPipe(input, session).getResult();
 		assertEquals("e26cfe84eccc86aa4f1189195dab9711", result);
 	}
 	
 	@Test
-	public void testChecksumResultSHA() throws PipeRunException, IOException {
+	public void testChecksumResultSHA_Unix() throws PipeRunException, IOException {
 		pipe.setType(CHECKSUM_SHA);
 		
 		String input = FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("ChecksumTest/testUnix.xml").getFile()));
 		String result = (String)pipe.doPipe(input, session).getResult();
 		assertEquals("961a501b131479a778abe5fe483f86b4727c9ce1", result);
+	}
+	
+	@Test
+	public void testChecksumResultSHA_Windows() throws PipeRunException, IOException {
+		pipe.setType(CHECKSUM_SHA);
 		
-		input = FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("ChecksumTest/testWindows.xml").getFile()));
-		result = (String)pipe.doPipe(input, session).getResult();
+		String input = FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("ChecksumTest/testWindows.xml").getFile()));
+		String result = (String)pipe.doPipe(input, session).getResult();
 		assertEquals("2770773f1cca9fe6389da30100184f89816de1a3", result);
 	}
 	
