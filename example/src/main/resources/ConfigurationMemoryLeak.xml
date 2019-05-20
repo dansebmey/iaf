@@ -1,0 +1,66 @@
+<module>
+	<adapter name="MemoryLeak" active="${MemoryLeak.active}"
+		description="Passes through a message with a wildcard">
+		<receiver name="Java Receiver for Starstar"
+			className="nl.nn.adapterframework.receivers.GenericReceiver">
+			<listener name="Starstar"
+				className="nl.nn.adapterframework.receivers.JavaListener" />
+		</receiver>
+		<pipeline firstPipe="CreateFile">
+			<exits>
+				<exit path="READY" state="success" />
+			</exits>
+			<pipe name="CreateFile"
+				actions="create"
+				className="nl.nn.adapterframework.pipes.FilePipe" directory="${testdata.dir}"
+				preserveInput="true"
+				fileName="input_big.xml" >
+				<forward name="success" path="SetStartIndex" />
+			</pipe>
+			<pipe name="SetStartIndex"
+				className="nl.nn.adapterframework.pipes.PutInSession"
+				preserveInput="true"
+				sessionKey="index" getInputFromFixedValue="0">
+				<forward name="success" path="SetEndIndex" />
+			</pipe>
+			<pipe name="SetEndIndex"
+				className="nl.nn.adapterframework.pipes.PutInSession"
+				sessionKey="endIndex" >
+				<forward name="success" path="ReadFile" />
+			</pipe>
+			
+			<pipe name="ReadFile"
+				actions="read"
+				className="nl.nn.adapterframework.pipes.FilePipe" storeResultInSessionKey="fileContent" fileSource="classpath" directory="StarStar/"
+				fileName="input_small.txt">
+				<forward name="success" path="AppendFile" />
+			</pipe>
+			<pipe name="AppendFile"
+				actions="write_append"
+				className="nl.nn.adapterframework.pipes.FilePipe" directory="${testdata.dir}"
+				fileName="input_big.xml" getInputFromSessionKey="fileContent">
+				<forward name="success" path="IncrementIndex" />
+			</pipe>
+			<!-- Checking of pending messages transcend the 150 threshold -->
+			<pipe name="IncrementIndex"
+				className="nl.nn.adapterframework.pipes.IncreaseIntegerPipe"
+				sessionKey="index">
+				<forward name="success" path="CompareValues" />
+			</pipe>
+			<pipe name="CompareValues"
+				className="nl.nn.adapterframework.pipes.CompareIntegerPipe"
+				sessionKey1="index" sessionKey2="endIndex">
+				<forward name="lessthan" path="AppendFile" />
+				<forward name="equals" path="READY" />
+				<forward name="greaterthan" path="READY" />
+			</pipe>
+			
+<!-- 			<pipe name="DeleteFile"
+				actions="delete"
+				className="nl.nn.adapterframework.pipes.FilePipe" directory="${testdata.dir}"
+				fileName="input_big.xml">
+				<forward name="success" path="READY" />
+			</pipe> -->
+		</pipeline>
+	</adapter>
+</module>
